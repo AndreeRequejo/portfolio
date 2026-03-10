@@ -1,23 +1,39 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "../styles/global.css";
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/playfair-display";
+import "@fontsource-variable/dm-sans";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+import ProfileSidebar from "../components/ProfileSidebar.astro";
+
+const yearNow = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Andree Requejo - Developer</title>
+  </head>
+  <body class="min-h-screen bg-background flex flex-col lg:flex-row">
+    <ProfileSidebar />
+    <main class="flex-1 min-w-0 pb-16 sm:pb-0">
+      <div class="max-w-2xl mx-auto p-4 sm:p-6">
+        <div class="h-8 geometric-lines mb-4 opacity-40"></div>
+        <slot />
+        <footer class="mt-12 pb-8 text-center">
+          <div class="h-px line-decorative mb-4"></div>
+          <p
+            class="font-mono text-[10px] uppercase tracking-widest text-muted-foreground"
+          >
+            © {yearNow} · Hecho con ♥ y mucho código
+          </p>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

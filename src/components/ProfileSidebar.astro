@@ -1,0 +1,151 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import {
+  MapPin,
+  GraduationCap,
+  FileDown,
+  Github,
+  Linkedin,
+  ExternalLink,
+} from "lucide-react";
+import avatarImg from "../assets/avatar.png";
+
+const links = [
+  {
+    icon: Github,
+    label: "github.com/AndreeRequejo",
+    href: "https://github.com/AndreeRequejo",
+  },
+  {
+    icon: Linkedin,
+    label: "linkedin.com/in/andree-rd",
+    href: "https://www.linkedin.com/in/andree-rd/",
+  },
+  { icon: ExternalLink, label: "tuwebsite.com", href: "#" },
+];
+---
+
+<aside
+  class="hidden lg:flex lg:w-72 xl:w-80 shrink-0 lg:sticky lg:top-0 lg:h-screen flex-col border-r border-border bg-card"
+>
+  <div class="p-5 flex flex-col h-full justify-between">
+    <!-- Top section -->
+    <div class="space-y-4">
+      <!-- Header with theme toggle -->
+      <div class="flex items-center justify-between">
+        <span
+          class="font-mono text-[10px] tracking-widest uppercase text-muted-foreground"
+        >
+          Portfolio
+        </span>
+        <ThemeToggle />
+      </div>
+
+      <!-- Avatar (animado con motion) -->
+      <div
+        id="profile-header"
+        class="flex items-center gap-3"
+        style="opacity:0"
+      >
+        <div
+          class="relative w-14 h-14 shrink-0 overflow-hidden border border-border"
+        >
+          <img
+            src={avatarImg.src}
+            alt="Profile avatar"
+            class="w-full h-full object-cover"
+          />
+          <div
+            class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-accent rounded-full border-2 border-card"
+          >
+          </div>
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-lg font-bold leading-tight truncate">
+            Andree Requejo
+          </h1>
+          <p class="font-mono text-xs text-primary truncate">@andree-rd</p>
+        </div>
+      </div>
+
+      <!-- Bio -->
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Full-Stack Developer apasionado por crear experiencias web únicas.
+      </p>
+
+      <!-- Location -->
+      <div class="flex items-center gap-2 text-xs text-muted-foreground">
+        <MapPin size={12} className="text-primary" />
+        <span>Chiclayo, Perú</span>
+      </div>
+
+      <!-- Education -->
+      <div class="space-y-2">
+        <div class="flex items-center gap-2 text-xs text-muted-foreground">
+          <GraduationCap size={13} className="text-primary"/>
+          <span class="font-mono text-[10px] uppercase tracking-widest">
+            Educación
+          </span>
+        </div>
+        <div class="pl-5 border-l border-border space-y-1">
+          <p class="text-xs font-medium text-foreground leading-snug">
+            Ingeniería de Sistemas y Computación
+          </p>
+          <p class="text-[11px] text-muted-foreground">
+            Universidad Católica Santo Toribio de Mogrovejo · 2021 - 2026
+          </p>
+        </div>
+      </div>
+
+      <!-- CV Button (animado con motion) -->
+      <a
+        id="cv-btn"
+        href="#"
+        download
+        class="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+      >
+        <FileDown size={15} />
+        Descargar CV
+      </a>
+    </div>
+
+    <!-- Bottom section - Links -->
+    <div class="space-y-3">
+      <div class="h-px line-decorative"></div>
+      <div class="space-y-1">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="flex items-center gap-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors group py-1"
+            >
+              <link.icon size={14} className="text-primary" />
+              <span class="group-hover:underline underline-offset-4 truncate">
+                {link.label}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <div class="h-10 diagonal-lines rounded-sm opacity-40"></div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { animate, hover, press } from "motion";
+
+  // Animación de entrada
+  animate("#profile-header", { opacity: 1, y: [10, 0] }, { duration: 0.4 });
+
+  // Hover y press en el botón de CV
+  hover("#cv-btn", (element) => {
+    animate(element, { scale: 1.03 }, { duration: 0.15 });
+    return () => animate(element, { scale: 1 }, { duration: 0.15 });
+  });
+
+  press("#cv-btn", (element) => {
+    animate(element, { scale: 0.97 }, { duration: 0.1 });
+    return () => animate(element, { scale: 1 }, { duration: 0.1 });
+  });
+</script>

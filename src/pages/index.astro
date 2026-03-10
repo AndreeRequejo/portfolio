@@ -1,8 +1,292 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import AboutSection from "../components/sections/AboutSection.astro";
+import ProjectsSection from "../components/sections/ProjectsSection.astro";
+import SkillsSection from "../components/sections/SkillsSection.astro";
+import ExperienceSection from "../components/sections/ExperienceSection.astro";
+import ContactSection from "../components/sections/ContactSection.astro";
+
+const tabs = [
+  {
+    id: "about",
+    label: "Sobre mi",
+    iconPath:
+      '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  },
+  {
+    id: "projects",
+    label: "Proyectos",
+    iconPath:
+      '<path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/>',
+  },
+  {
+    id: "skills",
+    label: "Skills",
+    iconPath:
+      '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+  },
+  {
+    id: "experience",
+    label: "Experiencia",
+    iconPath:
+      '<rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  },
+  {
+    id: "contact",
+    label: "Contacto",
+    iconPath: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  },
+];
 ---
 
 <Layout>
-  <h1>Welcome to Astro!</h1>
-  <p>This is the home page.</p>
+  <nav
+    class="hidden sm:flex sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border"
+  >
+    {
+      tabs.map((tab, index) => (
+        <button
+          type="button"
+          data-tab={tab.id}
+          class:list={[
+            "relative flex items-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors",
+            index === 0
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          ]}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            set:html={tab.iconPath}
+          />
+          {tab.label}
+          <div
+            class:list={[
+              "nav-indicator absolute bottom-0 left-0 right-0 h-0.5 bg-primary transition-opacity",
+              index === 0 ? "opacity-100" : "opacity-0",
+            ]}
+          />
+        </button>
+      ))
+    }
+  </nav>
+
+  <div class="sm:hidden">
+    <div
+      id="fab-backdrop"
+      class="hidden fixed inset-0 bg-background/60 backdrop-blur-sm z-30"
+    >
+    </div>
+
+    <div class="fixed bottom-5 right-5 z-40">
+      <div
+        id="fab-menu"
+        class="hidden absolute bottom-16 right-0 flex-col items-end gap-2"
+      >
+        {
+          tabs.map((tab, index) => (
+            <button
+              type="button"
+              data-fab-item
+              data-tab={tab.id}
+              class:list={[
+                "flex items-center gap-2.5 px-4 py-2.5 border text-sm font-medium shadow-lg transition-colors",
+                index === 0
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-foreground border-border hover:border-primary",
+              ]}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={tab.iconPath}
+              />
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <button
+        id="fab-btn"
+        type="button"
+        class="relative z-40 w-12 h-12 flex items-center justify-center bg-primary text-primary-foreground shadow-xl rounded-full"
+        aria-label="Abrir menu de navegacion"
+      >
+        <svg
+          id="fab-icon-menu"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+        <svg
+          id="fab-icon-x"
+          class="hidden absolute"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <AboutSection />
+  <ProjectsSection />
+  <SkillsSection />
+  <ExperienceSection />
+  <ContactSection />
+
+  <script>
+    import { animate } from "motion";
+
+    const defaultTab = "about";
+
+    function getCurrentTab() {
+      const hash = window.location.hash.replace("#", "");
+      return hash || defaultTab;
+    }
+
+    function setActiveTab(tabId: string) {
+      const sections = document.querySelectorAll("[data-section]");
+      const desktopTabs =
+        document.querySelectorAll<HTMLElement>("button[data-tab]");
+      const mobileTabs = document.querySelectorAll<HTMLElement>(
+        "button[data-fab-item]",
+      );
+
+      sections.forEach((section) => {
+        const isActive = section.id === tabId;
+        section.classList.toggle("hidden", !isActive);
+        if (isActive) {
+          animate(
+            section,
+            { opacity: [0.4, 1], y: [8, 0] },
+            { duration: 0.18 },
+          );
+        }
+      });
+
+      desktopTabs.forEach((tab) => {
+        const isActive = tab.getAttribute("data-tab") === tabId;
+        const indicator = tab.querySelector(".nav-indicator");
+        tab.classList.toggle("text-foreground", isActive);
+        tab.classList.toggle("text-muted-foreground", !isActive);
+        if (indicator) {
+          indicator.classList.toggle("opacity-100", isActive);
+          indicator.classList.toggle("opacity-0", !isActive);
+        }
+      });
+
+      mobileTabs.forEach((tab) => {
+        const isActive = tab.getAttribute("data-tab") === tabId;
+        tab.classList.toggle("bg-primary", isActive);
+        tab.classList.toggle("text-primary-foreground", isActive);
+        tab.classList.toggle("border-primary", isActive);
+        tab.classList.toggle("bg-card", !isActive);
+        tab.classList.toggle("text-foreground", !isActive);
+        tab.classList.toggle("border-border", !isActive);
+      });
+    }
+
+    function initSinglePageNav() {
+      const desktopTabs =
+        document.querySelectorAll<HTMLElement>("button[data-tab]");
+      const mobileItems = document.querySelectorAll<HTMLElement>(
+        "button[data-fab-item]",
+      );
+      const fabBtn = document.getElementById("fab-btn");
+      const fabMenu = document.getElementById("fab-menu");
+      const backdrop = document.getElementById("fab-backdrop");
+      const iconMenu = document.getElementById("fab-icon-menu");
+      const iconX = document.getElementById("fab-icon-x");
+
+      let isOpen = false;
+
+      function closeMenu() {
+        if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
+        isOpen = false;
+        iconMenu.classList.remove("hidden");
+        iconX.classList.add("hidden");
+        animate(
+          backdrop,
+          { opacity: [1, 0] },
+          { duration: 0.15 },
+        ).finished.then(() => backdrop.classList.add("hidden"));
+        fabMenu.classList.remove("flex");
+        setTimeout(() => fabMenu.classList.add("hidden"), 180);
+      }
+
+      function openMenu() {
+        if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
+        isOpen = true;
+        fabMenu.classList.remove("hidden");
+        fabMenu.classList.add("flex");
+        backdrop.classList.remove("hidden");
+        iconMenu.classList.add("hidden");
+        iconX.classList.remove("hidden");
+        animate(backdrop, { opacity: [0, 1] }, { duration: 0.2 });
+      }
+
+      const onSelectTab = (tabId: string) => {
+        window.location.hash = tabId;
+        setActiveTab(tabId);
+        closeMenu();
+      };
+
+      desktopTabs.forEach((tab) => {
+        tab.onclick = () =>
+          onSelectTab(tab.getAttribute("data-tab") || defaultTab);
+      });
+
+      mobileItems.forEach((tab) => {
+        tab.onclick = () =>
+          onSelectTab(tab.getAttribute("data-tab") || defaultTab);
+      });
+
+      if (fabBtn && fabMenu && backdrop && iconMenu && iconX) {
+        fabBtn.onclick = () => (isOpen ? closeMenu() : openMenu());
+        backdrop.onclick = closeMenu;
+      }
+
+      const initialTab = getCurrentTab();
+      setActiveTab(initialTab);
+    }
+
+    initSinglePageNav();
+    window.addEventListener("hashchange", () => setActiveTab(getCurrentTab()));
+  </script>
 </Layout>

@@ -5,9 +5,9 @@
 
 @theme inline {
   /* Fuentes */
-  --font-sans: "DM Sans", sans-serif;
-  --font-serif: "Playfair Display", serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "DM Sans Variable", sans-serif;
+  --font-serif: "Playfair Display Variable", serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
 
   /* Colores mapeados a las CSS variables del tema */
   --color-background: hsl(var(--background));

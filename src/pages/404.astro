@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="py-8 space-y-8">
+    <!-- Header label -->
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-[10px] tracking-widest uppercase text-muted-foreground">
+        Error
+      </span>
+      <div class="h-px flex-1 line-decorative opacity-60"></div>
+      <span class="font-mono text-[10px] tracking-widest uppercase text-muted-foreground">
+        404
+      </span>
+    </div>
+
+    <!-- Main content -->
+    <div class="space-y-6">
+      <h1 class="text-2xl font-bold text-foreground">Página no encontrada</h1>
+      <!-- Código de error decorativo -->
+      <div class="dot-pattern rounded-sm p-6 border border-border relative overflow-hidden">
+        <div class="relative z-10">
+          <p class="font-mono text-xs text-muted-foreground mb-1">
+            <span class="text-primary">throw</span> new Error(
+          </p>
+          <p class="font-mono text-[10px] text-muted-foreground pl-4 leading-relaxed">
+            &quot;Route <span class="text-accent">`{Astro.url.pathname}`</span> not found&quot;
+          </p>
+          <p class="font-mono text-xs text-muted-foreground">);</p>
+        </div>
+        <span
+          class="absolute -right-4 -bottom-6 font-serif font-black text-[8rem] leading-none text-foreground/5 select-none pointer-events-none"
+        >
+          404
+        </span>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a
+          href="/"
+          class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Volver al inicio
+        </a>
+        <a
+          href="javascript:history.back()"
+          class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+          </svg>
+          Página anterior
+        </a>
+      </div>
+    </div>
+
+    <!-- Separador -->
+    <div class="h-px line-decorative opacity-60"></div>
+
+    <!-- Sugerencias -->
+    <div class="space-y-3">
+      <p class="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        Quizás buscabas
+      </p>
+      <div class="grid grid-cols-2 gap-2">
+        {[
+          { label: "Sobre mí", href: "/about" },
+          { label: "Proyectos", href: "/projects" },
+          { label: "Experiencia", href: "/experience" },
+          { label: "Contacto", href: "/contact" },
+        ].map((item) => (
+          <a
+            href={item.href}
+            class="flex items-center gap-2 p-3 border border-border bg-card hover:border-primary hover:text-primary transition-colors text-sm text-muted-foreground group"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 group-hover:translate-x-0.5 transition-transform">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,7 +1,39 @@
-<section id="skills" data-section class="section-panel space-y-3 mt-6 animate-slide-in">
-  <h2 class="text-2xl font-bold">Skills</h2>
-  <p class="text-sm text-muted-foreground leading-relaxed">
-    Seccion pensada para agrupar tus habilidades por categorias: frontend,
-    backend, bases de datos, testing y herramientas.
-  </p>
+---
+import { categories } from "../../consts/skills";
+---
+
+<section
+  id="skills"
+  data-section
+  class="section-panel space-y-3 mt-6 animate-slide-in"
+>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {
+      categories.map((cat) => (
+        <article class="border border-border bg-card p-5 space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="text-lg font-mono text-primary">{cat.emoji}</span>
+            <h3 class="font-sans font-bold text-base">{cat.title}</h3>
+            <span class="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
+              {cat.skills.length}
+            </span>
+          </div>
+          <div class="h-px line-decorative" />
+          <div class="flex flex-wrap gap-2">
+            {cat.skills.map((skill, si) => (
+              <div class="flex items-center gap-2 px-3 py-2 border border-border bg-background hover:border-primary transition-colors cursor-default">
+                <img
+                  src={skill.icon}
+                  alt={skill.name}
+                  class="w-5 h-5 object-contain dark:brightness-90"
+                  loading="lazy"
+                />
+                <span class="text-xs font-medium">{skill.name}</span>
+              </div>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </div>
 </section>

@@ -16,41 +16,42 @@ const defaultTab = tabs[0]?.id ?? "about";
 <nav
   id="desktop-tabs"
   data-default-tab={defaultTab}
-  style={`--tab-count:${tabs.length}`}
-  class="feed-nav-desktop hidden sm:grid sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border"
+  class="feed-nav-desktop hidden sm:block sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border"
 >
-  {
-    tabs.map((tab, index) => (
-      <a
-        href={`#${tab.id}`}
-        data-tab={tab.id}
-        class:list={[
-          "feed-nav-tab relative flex items-center justify-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors",
-          index === 0
-            ? "text-foreground"
-            : "text-muted-foreground hover:text-foreground",
-        ]}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          set:html={tab.iconPath}
-        />
-        {tab.label}
-      </a>
-    ))
-  }
-  <div
-    id="active-tab-indicator"
-    class="feed-nav-indicator absolute bottom-0 left-0 h-0.5 bg-primary pointer-events-none"
-  ></div>
+  <div data-tab-track class="relative flex justify-center md:justify-start">
+    {
+      tabs.map((tab, index) => (
+        <a
+          href={`#${tab.id}`}
+          data-tab={tab.id}
+          class:list={[
+            "feed-nav-tab relative flex items-center justify-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors",
+            index === 0
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          ]}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            set:html={tab.iconPath}
+          />
+          {tab.label}
+        </a>
+      ))
+    }
+    <div
+      id="active-tab-indicator"
+      class="feed-nav-indicator absolute bottom-0 left-0 h-0.5 bg-primary pointer-events-none"
+    ></div>
+  </div>
 </nav>
 
 <div class="sm:hidden">
@@ -141,6 +142,49 @@ const defaultTab = tabs[0]?.id ?? "about";
 <script>
   import { animate } from "motion";
 
+  function initDesktopIndicator() {
+    const nav = document.getElementById("desktop-tabs");
+    const track = nav?.querySelector<HTMLElement>("[data-tab-track]");
+    const indicator = document.getElementById("active-tab-indicator");
+
+    if (!nav || !track || !indicator) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const syncIndicator = () => {
+      const hash = window.location.hash.slice(1) || nav.dataset.defaultTab || "about";
+      const activeTab = nav.querySelector<HTMLElement>(`[data-tab="${hash}"]`)
+        ?? nav.querySelector<HTMLElement>("[data-tab]");
+
+      if (!activeTab) return;
+
+      const offset = activeTab.offsetLeft;
+      const width = activeTab.offsetWidth;
+
+      indicator.style.setProperty("--indicator-offset", `${offset}px`);
+      indicator.style.setProperty("--indicator-width", `${width}px`);
+    };
+
+    nav.querySelectorAll<HTMLElement>("[data-tab]").forEach((tab) => {
+      tab.addEventListener(
+        "click",
+        () => {
+          requestAnimationFrame(syncIndicator);
+        },
+        { signal }
+      );
+    });
+
+    window.addEventListener("hashchange", syncIndicator, { signal });
+    window.addEventListener("resize", syncIndicator, { passive: true, signal });
+    window.addEventListener("load", syncIndicator, { signal });
+    document.fonts?.ready.then(syncIndicator);
+    requestAnimationFrame(syncIndicator);
+
+    return () => controller.abort();
+  }
+
   function initFeedNav() {
     const fabBtn = document.getElementById("fab-btn");
     const fabMenu = document.getElementById("fab-menu");
@@ -184,5 +228,6 @@ const defaultTab = tabs[0]?.id ?? "about";
     }
   }
 
+  initDesktopIndicator();
   initFeedNav();
 </script>

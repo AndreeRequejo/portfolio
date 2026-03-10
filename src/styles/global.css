@@ -182,17 +182,14 @@
     display: none;
     scroll-margin-top: 6rem;
   }
-  .feed-nav-desktop {
-    grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
-  }
   .feed-nav-tab {
     color: hsl(var(--nav-inactive));
   }
   .feed-nav-indicator {
-    width: calc(100% / var(--tab-count));
-    transform: translateX(0%);
+    width: var(--indicator-width, 0px);
+    transform: translateX(var(--indicator-offset, 0px));
     transition:
-      transform 360ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      transform 360ms cubic-bezier(0.175, 0.785, 0.32, 1.05),
       width 280ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .line-decorative {
@@ -252,25 +249,4 @@ body:has(#contact:target) [data-fab-item][data-tab="contact"] {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
   border-color: hsl(var(--primary));
-}
-
-body:not(:has([data-section]:target)) #active-tab-indicator,
-body:has(#about:target) #active-tab-indicator {
-  transform: translateX(0%);
-}
-
-body:has(#projects:target) #active-tab-indicator {
-  transform: translateX(100%);
-}
-
-body:has(#skills:target) #active-tab-indicator {
-  transform: translateX(200%);
-}
-
-body:has(#experience:target) #active-tab-indicator {
-  transform: translateX(300%);
-}
-
-body:has(#contact:target) #active-tab-indicator {
-  transform: translateX(400%);
 }

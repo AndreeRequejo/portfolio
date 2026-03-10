@@ -1,0 +1,188 @@
+---
+interface TabItem {
+  id: string;
+  label: string;
+  iconPath: string;
+}
+
+interface Props {
+  tabs: TabItem[];
+}
+
+const { tabs } = Astro.props;
+const defaultTab = tabs[0]?.id ?? "about";
+---
+
+<nav
+  id="desktop-tabs"
+  data-default-tab={defaultTab}
+  style={`--tab-count:${tabs.length}`}
+  class="feed-nav-desktop hidden sm:grid sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border"
+>
+  {
+    tabs.map((tab, index) => (
+      <a
+        href={`#${tab.id}`}
+        data-tab={tab.id}
+        class:list={[
+          "feed-nav-tab relative flex items-center justify-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors",
+          index === 0
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground",
+        ]}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          set:html={tab.iconPath}
+        />
+        {tab.label}
+      </a>
+    ))
+  }
+  <div
+    id="active-tab-indicator"
+    class="feed-nav-indicator absolute bottom-0 left-0 h-0.5 bg-primary pointer-events-none"
+  ></div>
+</nav>
+
+<div class="sm:hidden">
+  <div
+    id="fab-backdrop"
+    class="hidden fixed inset-0 bg-background/60 backdrop-blur-sm z-30"
+  >
+  </div>
+
+  <div class="fixed bottom-5 right-5 z-40">
+    <div
+      id="fab-menu"
+      class="hidden absolute bottom-16 right-0 flex-col items-end gap-2"
+    >
+      {
+        tabs.map((tab, index) => (
+          <a
+            href={`#${tab.id}`}
+            data-fab-item
+            data-tab={tab.id}
+            class:list={[
+              "feed-fab-item flex items-center gap-2.5 px-4 py-2.5 border text-sm font-medium shadow-lg transition-colors",
+              index === 0
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-card text-foreground border-border hover:border-primary",
+            ]}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              set:html={tab.iconPath}
+            />
+            {tab.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <button
+      id="fab-btn"
+      type="button"
+      class="relative z-40 w-12 h-12 flex items-center justify-center bg-primary text-primary-foreground shadow-xl rounded-full"
+      aria-label="Abrir menu de navegacion"
+    >
+      <svg
+        id="fab-icon-menu"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="4" x2="20" y1="6" y2="6"></line>
+        <line x1="4" x2="20" y1="12" y2="12"></line>
+        <line x1="4" x2="20" y1="18" y2="18"></line>
+      </svg>
+      <svg
+        id="fab-icon-x"
+        class="hidden absolute"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { animate } from "motion";
+
+  function initFeedNav() {
+    const fabBtn = document.getElementById("fab-btn");
+    const fabMenu = document.getElementById("fab-menu");
+    const backdrop = document.getElementById("fab-backdrop");
+    const iconMenu = document.getElementById("fab-icon-menu");
+    const iconX = document.getElementById("fab-icon-x");
+    const mobileItems = document.querySelectorAll<HTMLElement>("[data-fab-item]");
+
+    let isOpen = false;
+
+    function closeMenu() {
+      if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
+      isOpen = false;
+      iconMenu.classList.remove("hidden");
+      iconX.classList.add("hidden");
+      animate(backdrop, { opacity: [1, 0] }, { duration: 0.15 }).finished.then(
+        () => backdrop.classList.add("hidden")
+      );
+      fabMenu.classList.remove("flex");
+      setTimeout(() => fabMenu.classList.add("hidden"), 180);
+    }
+
+    function openMenu() {
+      if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
+      isOpen = true;
+      fabMenu.classList.remove("hidden");
+      fabMenu.classList.add("flex");
+      backdrop.classList.remove("hidden");
+      iconMenu.classList.add("hidden");
+      iconX.classList.remove("hidden");
+      animate(backdrop, { opacity: [0, 1] }, { duration: 0.2 });
+    }
+
+    mobileItems.forEach((tab) => {
+      tab.onclick = () => closeMenu();
+    });
+
+    if (fabBtn && fabMenu && backdrop && iconMenu && iconX) {
+      fabBtn.onclick = () => (isOpen ? closeMenu() : openMenu());
+      backdrop.onclick = closeMenu;
+    }
+  }
+
+  initFeedNav();
+</script>

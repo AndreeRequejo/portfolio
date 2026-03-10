@@ -1,7 +1,118 @@
-<section id="projects" data-section class="section-panel space-y-3 mt-6 animate-slide-in">
-  <h2 class="text-2xl font-bold">Proyectos</h2>
-  <p class="text-sm text-muted-foreground leading-relaxed">
-    Aqui puedes mostrar tus proyectos destacados, stack tecnico, impacto y
-    enlaces a demos o repositorios.
-  </p>
+---
+import { ExternalLink, Github, Globe, Smartphone } from "lucide-react";
+import { projects } from "../../consts/projects";
+---
+
+<section
+  id="projects"
+  data-section
+  class="section-panel space-y-3 mt-6 animate-slide-in"
+>
+  <div class="space-y-5">
+    <div class="flex items-center gap-3 px-1 mb-2">
+      <div class="w-2 h-2 bg-primary rotate-45"></div>
+      <span
+        class="font-mono text-xs uppercase tracking-widest text-muted-foreground"
+      >
+        {projects.length} repositorios
+      </span>
+    </div>
+
+    {
+      projects.map((project, i) => (
+        <article
+          class={`border bg-card overflow-hidden group transition-colors ${
+            project.featured ? "border-primary/40" : "border-border"
+          } hover:border-primary`}
+        >
+          {/* Image preview */}
+          <div class="relative overflow-hidden h-44 sm:h-52">
+            <img
+              src={project.image}
+              alt={`Preview de ${project.title}`}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            {/* Overlay gradient */}
+            <div class="absolute inset-0 bg-linear-to-t from-card via-card/20 to-transparent opacity-60" />
+
+            {/* Platform badge */}
+            <div class="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-card/90 backdrop-blur-sm border border-border text-[10px] font-mono uppercase tracking-wider">
+              {project.platform === "web" ? (
+                <Globe size={11} className="text-primary" />
+              ) : (
+                <Smartphone size={11} className="text-accent" />
+              )}
+              {project.platform === "web" ? "Web" : "Mobile"}
+            </div>
+
+            {/* Featured badge */}
+            {project.featured && (
+              <div class="absolute top-3 right-3 px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-primary text-primary-foreground">
+                Featured
+              </div>
+            )}
+
+            {/* Action buttons overlay */}
+            <div class="absolute bottom-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+              <a
+                href={project.github}
+                class="flex items-center gap-1.5 px-3 py-1.5 bg-card/95 backdrop-blur-sm border border-border text-xs font-medium hover:border-primary hover:text-primary transition-colors"
+              >
+                <Github size={13} />
+                Código
+              </a>
+              {project.demo && (
+                <a
+                  href={project.demo}
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-opacity"
+                >
+                  <ExternalLink size={13} />
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div class="p-5 space-y-3">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-sans font-bold text-base group-hover:text-primary transition-colors">
+                {project.title}
+              </h3>
+              {/* Mobile-visible action links */}
+              <div class="flex items-center gap-2 sm:hidden">
+                <a
+                  href={project.github}
+                  class="p-1.5 border border-border hover:border-primary hover:text-primary transition-colors"
+                >
+                  <Github size={14} />
+                </a>
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    class="p-1.5 bg-primary text-primary-foreground"
+                  >
+                    <ExternalLink size={14} />
+                  </a>
+                )}
+              </div>
+            </div>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              {project.desc}
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span
+                  class="px-2 py-0.5 text-[11px] font-mono border border-border bg-background text-muted-foreground"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
 </section>

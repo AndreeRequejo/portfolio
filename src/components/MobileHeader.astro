@@ -1,0 +1,47 @@
+---
+import { GraduationCap, FileDown } from "lucide-react";
+import ThemeToggle from "./ThemeToggle.astro";
+import avatarImg from "../assets/avatar.png";
+---
+
+<header
+  class="lg:hidden sticky top-0 z-30 bg-card/90 backdrop-blur-md border-b border-border"
+>
+  <div class="flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 overflow-hidden border border-border">
+        <img
+          src={avatarImg.src}
+          alt="Avatar"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div>
+        <h1 class="text-sm font-bold leading-none">Andree</h1>
+        <p class="font-mono text-[10px] text-primary">@andree-rd</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <a
+        href="#"
+        download
+        class="w-auto h-10 flex items-center justify-center gap-1 px-2 border border-border text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+        title="Descargar CV"
+      >
+        <FileDown size={16} />
+        <span>CV</span>
+      </a>
+      <ThemeToggle />
+    </div>
+  </div>
+  {/* Education strip */}
+  <div
+    class="flex items-center gap-2 px-4 pb-2.5 text-xs text-muted-foreground"
+  >
+    <GraduationCap size={12} className="text-primary shrink-0" />
+    <span class="text-foreground font-medium"
+      >Ing. de Sistemas y Computación</span
+    >
+    <span class="text-[10px]">· 2021 — 2026</span>
+  </div>
+</header>

@@ -1,7 +1,50 @@
-<section id="experience" data-section class="section-panel space-y-3 mt-6 animate-slide-in">
-  <h2 class="text-2xl font-bold">Experiencia</h2>
-  <p class="text-sm text-muted-foreground leading-relaxed">
-    Agrega aqui tu experiencia profesional con logros medibles y tecnologias
-    que dominaste en cada etapa.
-  </p>
+---
+import { experiences } from "../../consts/experience";
+---
+
+<section
+  id="experience"
+  data-section
+  class="section-panel space-y-3 mt-6 animate-slide-in"
+>
+  <div class="space-y-6">
+    <article class="border border-border bg-card p-5 space-y-0">
+      <h3 class="font-mono text-sm uppercase tracking-widest text-primary mb-4">
+        Experiencia laboral
+      </h3>
+      {
+        experiences.map((exp, i) => (
+          <div class="relative pl-6 pb-6 last:pb-0 group">
+            {i < experiences.length - 1 && (
+              <div class="absolute left-1.25 top-3 bottom-0 w-px line-decorative" />
+            )}
+            <div class="absolute left-0 top-1.5 w-2.75 h-2.75 border-2 border-primary bg-card rounded-full group-hover:bg-primary transition-colors" />
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h4 class="font-sans font-bold text-sm">{exp.role}</h4>
+                <span class="text-xs text-primary font-mono">
+                  @ {exp.company}
+                </span>
+              </div>
+              <span class="font-mono text-[11px] text-muted-foreground">
+                {exp.period}
+              </span>
+              <ul class="text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
+                {exp.desc.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                {exp.tags.map((tag) => (
+                  <span class="px-2 py-0.5 text-[10px] font-mono border border-border bg-background text-muted-foreground">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </article>
+  </div>
 </section>

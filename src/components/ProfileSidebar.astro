@@ -9,20 +9,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import avatarImg from "../assets/avatar.png";
-
-const links = [
-  {
-    icon: Github,
-    label: "github.com/AndreeRequejo",
-    href: "https://github.com/AndreeRequejo",
-  },
-  {
-    icon: Linkedin,
-    label: "linkedin.com/in/andree-rd",
-    href: "https://www.linkedin.com/in/andree-rd/",
-  },
-  { icon: ExternalLink, label: "andree.is-a.dev", href: "https://andree.is-a.dev" },
-];
+import { socialLinks } from "../consts/socials";
 ---
 
 <aside
@@ -114,9 +101,10 @@ const links = [
       <div class="h-px line-decorative"></div>
       <div class="space-y-1">
         {
-          links.map((link) => (
+          socialLinks.map((link) => (
             <a
               href={link.href}
+              target="_blank"
               class="flex items-center gap-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors group py-1"
             >
               <link.icon size={14} className="text-primary" />

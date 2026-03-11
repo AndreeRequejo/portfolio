@@ -14,22 +14,17 @@ const defaultTab = tabs[0]?.id ?? "about";
 ---
 
 <nav
-  id="desktop-tabs"
+  id="feed-nav-root"
   data-default-tab={defaultTab}
   class="feed-nav-desktop hidden sm:block sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border"
 >
-  <div data-tab-track class="relative flex justify-center md:justify-start">
+  <div class="relative flex justify-center md:justify-start mx-auto px-4">
     {
-      tabs.map((tab, index) => (
+      tabs.map((tab) => (
         <a
           href={`#${tab.id}`}
           data-tab={tab.id}
-          class:list={[
-            "feed-nav-tab relative flex items-center justify-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors",
-            index === 0
-              ? "text-foreground"
-              : "text-muted-foreground hover:text-foreground",
-          ]}
+          class="feed-nav-tab relative flex items-center justify-center gap-2 px-5 py-4 text-sm font-medium whitespace-nowrap transition-colors text-muted-foreground hover:text-foreground active:scale-95"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +44,8 @@ const defaultTab = tabs[0]?.id ?? "about";
     }
     <div
       id="active-tab-indicator"
-      class="feed-nav-indicator absolute bottom-0 left-0 h-0.5 bg-primary pointer-events-none"
+      class="absolute bottom-0 left-0 h-0.5 bg-primary pointer-events-none"
+      style="width: var(--ind-width, 0); transform: translateX(var(--ind-offset, 0));"
     ></div>
   </div>
 </nav>
@@ -57,32 +53,27 @@ const defaultTab = tabs[0]?.id ?? "about";
 <div class="sm:hidden">
   <div
     id="fab-backdrop"
-    class="hidden fixed inset-0 bg-background/60 backdrop-blur-sm z-30"
-  >
-  </div>
+    class="hidden fixed inset-0 bg-background/40 backdrop-blur-[2px] z-30 opacity-0"
+  ></div>
 
-  <div class="fixed bottom-5 right-5 z-40">
+  <div class="fixed bottom-6 right-6 z-40">
     <div
       id="fab-menu"
-      class="hidden absolute bottom-16 right-0 flex-col items-end gap-2"
+      class="hidden absolute bottom-16 right-0 flex-col items-end gap-3"
+      style="transform-origin: bottom right"
     >
       {
-        tabs.map((tab, index) => (
+        tabs.map((tab) => (
           <a
             href={`#${tab.id}`}
             data-fab-item
             data-tab={tab.id}
-            class:list={[
-              "feed-fab-item flex items-center gap-2.5 px-4 py-2.5 border text-sm font-medium shadow-lg transition-colors",
-              index === 0
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-card text-foreground border-border hover:border-primary",
-            ]}
+            class="feed-fab-item flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-semibold shadow-2xl transition-all bg-card text-foreground border-border active:scale-90"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -100,134 +91,167 @@ const defaultTab = tabs[0]?.id ?? "about";
     <button
       id="fab-btn"
       type="button"
-      class="relative z-40 w-12 h-12 flex items-center justify-center bg-primary text-primary-foreground shadow-xl rounded-full"
-      aria-label="Abrir menu de navegacion"
+      class="relative z-50 w-14 h-14 flex items-center justify-center bg-primary text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-full transition-transform active:scale-90"
+      aria-label="Menú de navegación"
     >
-      <svg
-        id="fab-icon-menu"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <line x1="4" x2="20" y1="6" y2="6"></line>
-        <line x1="4" x2="20" y1="12" y2="12"></line>
-        <line x1="4" x2="20" y1="18" y2="18"></line>
-      </svg>
-      <svg
-        id="fab-icon-x"
-        class="hidden absolute"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M18 6 6 18"></path>
-        <path d="m6 6 12 12"></path>
-      </svg>
+      <div class="relative w-6 h-6 pointer-events-none">
+        <svg id="fab-icon-menu" class="absolute inset-0 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+        <svg id="fab-icon-x" class="absolute -inset-1 opacity-0 scale-50 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </div>
     </button>
   </div>
 </div>
 
-<script>
-  import { animate } from "motion";
-
-  function initDesktopIndicator() {
-    const nav = document.getElementById("desktop-tabs");
-    const track = nav?.querySelector<HTMLElement>("[data-tab-track]");
-    const indicator = document.getElementById("active-tab-indicator");
-
-    if (!nav || !track || !indicator) return;
-
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    const syncIndicator = () => {
-      const hash = window.location.hash.slice(1) || nav.dataset.defaultTab || "about";
-      const activeTab = nav.querySelector<HTMLElement>(`[data-tab="${hash}"]`)
-        ?? nav.querySelector<HTMLElement>("[data-tab]");
-
-      if (!activeTab) return;
-
-      const offset = activeTab.offsetLeft;
-      const width = activeTab.offsetWidth;
-
-      indicator.style.setProperty("--indicator-offset", `${offset}px`);
-      indicator.style.setProperty("--indicator-width", `${width}px`);
-    };
-
-    nav.querySelectorAll<HTMLElement>("[data-tab]").forEach((tab) => {
-      tab.addEventListener(
-        "click",
-        () => {
-          requestAnimationFrame(syncIndicator);
-        },
-        { signal }
-      );
-    });
-
-    window.addEventListener("hashchange", syncIndicator, { signal });
-    window.addEventListener("resize", syncIndicator, { passive: true, signal });
-    window.addEventListener("load", syncIndicator, { signal });
-    document.fonts?.ready.then(syncIndicator);
-    requestAnimationFrame(syncIndicator);
-
-    return () => controller.abort();
+<style>
+  /* El indicador usa transform para máxima fluidez */
+  #active-tab-indicator {
+    transition: 
+      transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), 
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, width;
   }
 
-  function initFeedNav() {
+  /* Estilo visual para los items activos */
+  .tab-active {
+    color: hsl(var(--foreground)) !important;
+  }
+</style>
+
+<script>
+  import { animate, stagger } from "motion";
+
+  // --- LÓGICA DESKTOP ---
+  function initDesktop() {
+    const nav = document.getElementById("feed-nav-root");
+    const indicator = document.getElementById("active-tab-indicator");
+    if (!nav || !indicator) return;
+
+    const syncIndicator = () => {
+      const hash = window.location.hash.slice(1) || nav.dataset.defaultTab;
+      const activeTab = nav.querySelector<HTMLElement>(`[data-tab="${hash}"]`);
+      
+      nav.querySelectorAll("[data-tab]").forEach(t => t.classList.remove("tab-active"));
+      
+      if (activeTab) {
+        activeTab.classList.add("tab-active");
+        nav.style.setProperty("--ind-width", `${activeTab.offsetWidth}px`);
+        nav.style.setProperty("--ind-offset", `${activeTab.offsetLeft}px`);
+      }
+    };
+
+    window.addEventListener("hashchange", syncIndicator);
+    window.addEventListener("resize", syncIndicator);
+    // Ejecución inicial
+    setTimeout(syncIndicator, 50); 
+  }
+
+  // --- LÓGICA MOBILE (FAB) ---
+  function initMobile() {
     const fabBtn = document.getElementById("fab-btn");
     const fabMenu = document.getElementById("fab-menu");
     const backdrop = document.getElementById("fab-backdrop");
     const iconMenu = document.getElementById("fab-icon-menu");
     const iconX = document.getElementById("fab-icon-x");
-    const mobileItems = document.querySelectorAll<HTMLElement>("[data-fab-item]");
+    const items = Array.from(document.querySelectorAll<HTMLElement>("[data-fab-item]"));
+
+    if (!fabBtn || !fabMenu || !backdrop || !iconMenu || !iconX || items.length === 0) return;
 
     let isOpen = false;
+    let menuAnimation: { stop?: () => void; finished?: Promise<void> } | null = null;
+    let backdropAnimation: { stop?: () => void; finished?: Promise<void> } | null = null;
+    let menuIconAnimation: { stop?: () => void } | null = null;
+    let closeIconAnimation: { stop?: () => void } | null = null;
+    
+    const stopRunningAnimations = () => {
+      menuAnimation?.stop?.();
+      backdropAnimation?.stop?.();
+      menuIconAnimation?.stop?.();
+      closeIconAnimation?.stop?.();
+    };
 
-    function closeMenu() {
-      if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
-      isOpen = false;
-      iconMenu.classList.remove("hidden");
-      iconX.classList.add("hidden");
-      animate(backdrop, { opacity: [1, 0] }, { duration: 0.15 }).finished.then(
-        () => backdrop.classList.add("hidden")
-      );
-      fabMenu.classList.remove("flex");
-      setTimeout(() => fabMenu.classList.add("hidden"), 180);
-    }
+    const animateMenuItems = (
+      keyframes: Record<string, string | number | Array<string | number>>,
+      options: Record<string, unknown>
+    ) => animate(items, keyframes as never, options as never);
 
-    function openMenu() {
-      if (!fabMenu || !backdrop || !iconMenu || !iconX) return;
-      isOpen = true;
+    const resetMenuItems = () => {
+      items.forEach((item) => {
+        item.style.opacity = "0";
+        item.style.transform = "translateY(15px) scale(0.9)";
+      });
+    };
+
+    const showMenu = () => {
       fabMenu.classList.remove("hidden");
       fabMenu.classList.add("flex");
       backdrop.classList.remove("hidden");
-      iconMenu.classList.add("hidden");
-      iconX.classList.remove("hidden");
-      animate(backdrop, { opacity: [0, 1] }, { duration: 0.2 });
-    }
+      resetMenuItems();
 
-    mobileItems.forEach((tab) => {
-      tab.onclick = () => closeMenu();
-    });
+      requestAnimationFrame(() => {
+        backdropAnimation = animate(backdrop, { opacity: 1 }, { duration: 0.2 });
+        menuIconAnimation = animate(iconMenu, { opacity: 0, rotate: 90, scale: 0.5 }, { duration: 0.2 });
+        closeIconAnimation = animate(iconX, { opacity: 1, rotate: 0, scale: 1 }, { duration: 0.2 });
+        menuAnimation = animateMenuItems(
+          { opacity: [0, 1], transform: ["translateY(15px) scale(0.9)", "translateY(0px) scale(1)"] },
+          {
+            delay: stagger(0.03, { from: "last" }),
+            duration: 0.24,
+            easing: [0.22, 1, 0.36, 1],
+          }
+        );
+      });
+    };
 
-    if (fabBtn && fabMenu && backdrop && iconMenu && iconX) {
-      fabBtn.onclick = () => (isOpen ? closeMenu() : openMenu());
-      backdrop.onclick = closeMenu;
-    }
+    const hideMenu = () => {
+      menuIconAnimation = animate(iconMenu, { opacity: 1, rotate: 0, scale: 1 }, { duration: 0.2 });
+      closeIconAnimation = animate(iconX, { opacity: 0, rotate: -90, scale: 0.5 }, { duration: 0.2 });
+      backdropAnimation = animate(backdrop, { opacity: 0 }, { duration: 0.2 });
+
+      menuAnimation = animateMenuItems(
+        { opacity: 0, y: 15, scale: 0.9 },
+        { duration: 0.15, delay: stagger(0.03) }
+      );
+
+      backdropAnimation.finished?.then(() => {
+        if (!isOpen) {
+          backdrop.classList.add("hidden");
+        }
+      });
+
+      menuAnimation.finished?.then(() => {
+        if (!isOpen) {
+          fabMenu.classList.add("hidden");
+          fabMenu.classList.remove("flex");
+        }
+      });
+    };
+
+    const toggleMenu = (forceClose = false) => {
+      stopRunningAnimations();
+      isOpen = forceClose ? false : !isOpen;
+
+      if (isOpen) {
+        showMenu();
+      } else {
+        hideMenu();
+      }
+    };
+
+    fabBtn.addEventListener("click", () => toggleMenu());
+    backdrop.addEventListener("click", () => toggleMenu(true));
+    items.forEach(item => item.addEventListener("click", () => toggleMenu(true)));
   }
 
-  initDesktopIndicator();
-  initFeedNav();
+  // Iniciar todo
+  document.addEventListener("DOMContentLoaded", () => {
+    initDesktop();
+    initMobile();
+  });
 </script>

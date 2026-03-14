@@ -1,19 +1,18 @@
-interface Skill {
+import type { Locale } from "../i18n/types";
+
+export type Skill = {
   name: string;
   icon: string;
-}
+};
 
-interface SkillCategory {
+export type SkillCategory = {
   title: string;
   emoji: string;
   skills: Skill[];
-}
+};
 
-export const categories: SkillCategory[] = [
-  {
-    title: "Frontend",
-    emoji: "◧",
-    skills: [
+const skillStack: Record<string, Skill[]> = {
+  frontend: [
       {
         name: "HTML5",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
@@ -55,11 +54,7 @@ export const categories: SkillCategory[] = [
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/astro/astro-original.svg",
       }
     ],
-  },
-  {
-    title: "Backend",
-    emoji: "◨",
-    skills: [
+  backend: [
       {
         name: "Node.js",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
@@ -83,59 +78,35 @@ export const categories: SkillCategory[] = [
       {
         name: "Spring Boot",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg",
-      }
-    ],
-  },
-  {
-    title: "Bases de Datos",
-    emoji: "◫",
-    skills: [
-      {
-        name: "PostgreSQL",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
-      },
-      {
-        name: "MySQL",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
-      },
-      {
-        name: "SQL Server",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-original.svg",
-      },
-      {
-        name: "MongoDB",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-      },
-      {
-        name: "Redis",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
       },
     ],
-  },
-  {
-    title: "DevOps & Herramientas",
-    emoji: "◬",
-    skills: [
-      {
-        name: "Docker",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
-      },
-      {
-        name: "Git",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
-      },
-      {
-        name: "Linux",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
-      },
-      {
-        name: "AWS",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
-      },
-      {
-        name: "Figma",
-        icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-      },
-    ],
-  },
-];
+  data: [
+    { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+    { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+    { name: "SQL Server", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-original.svg" },
+    { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+    { name: "Redis", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
+  ],
+  devops: [
+    { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+    { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+    { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
+    { name: "AWS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+    { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+  ],
+};
+
+export const categories: Record<Locale, SkillCategory[]> = {
+  es: [
+    { title: "Frontend", emoji: "◧", skills: skillStack.frontend },
+    { title: "Backend", emoji: "◨", skills: skillStack.backend },
+    { title: "Bases de Datos", emoji: "◫", skills: skillStack.data },
+    { title: "DevOps & Herramientas", emoji: "◬", skills: skillStack.devops },
+  ],
+  en: [
+    { title: "Frontend", emoji: "◧", skills: skillStack.frontend },
+    { title: "Backend", emoji: "◨", skills: skillStack.backend },
+    { title: "Databases", emoji: "◫", skills: skillStack.data },
+    { title: "DevOps and Tooling", emoji: "◬", skills: skillStack.devops },
+  ],
+};

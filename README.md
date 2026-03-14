@@ -1,46 +1,103 @@
-# Astro Starter Kit: Basics
+# Portfolio personal
 
-```sh
-pnpm create astro@latest -- --template basics
+Sitio web de portfolio desarrollado con Astro, enfocado en rendimiento, accesibilidad y una experiencia visual moderna.
+
+## Stack principal
+
+- Astro
+- Tailwind CSS 4
+- TypeScript
+- Despliegue con adaptador de Vercel
+
+## Caracteristicas
+
+- Secciones modulares para perfil, experiencia, habilidades, proyectos y contacto
+- Contenido centralizado en archivos de constantes para editar rapido
+- Soporte de idiomas en español e ingles
+- Estructura limpia para escalar el portfolio con nuevas secciones
+
+## Requisitos
+
+- Node.js 20 o superior
+- pnpm
+
+## Instalacion y desarrollo local
+
+1. Instala dependencias:
+
+```bash
+pnpm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+2. Inicia el entorno de desarrollo:
 
-## 🚀 Project Structure
+```bash
+pnpm dev
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+3. Abre en el navegador:
+
+http://localhost:4321
+
+## Scripts disponibles
+
+| Script | Descripcion |
+| :----- | :---------- |
+| `pnpm dev` | Inicia el servidor local de desarrollo |
+| `pnpm build` | Genera la version de produccion en `dist/` |
+| `pnpm preview` | Previsualiza localmente la build de produccion |
+| `pnpm astro` | Ejecuta comandos de la CLI de Astro |
+
+## Estructura del proyecto
 
 ```text
-/
+.
 ├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+├── src/
+│   ├── assets/
+│   │   └── projects/
+│   ├── components/
+│   │   ├── sections/
+│   │   └── ui/
+│   ├── consts/
+│   ├── layouts/
+│   ├── pages/
+│   ├── scripts/
+│   └── styles/
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Donde editar el contenido
 
-## 🧞 Commands
+Para actualizar la informacion del portfolio (texto, links, experiencia, skills, proyectos), revisa principalmente:
 
-All commands are run from the root of the project, from a terminal:
+- `src/consts/about.ts`
+- `src/consts/experience.ts`
+- `src/consts/projects.ts`
+- `src/consts/skills.ts`
+- `src/consts/socials.ts`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## Internacionalizacion
 
-## 👀 Want to learn more?
+La app esta configurada con locales:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `es` (por defecto)
+- `en`
+
+Puedes ajustar esta configuracion en `astro.config.mjs`.
+
+## Build y despliegue
+
+Generar build de produccion:
+
+```bash
+pnpm build
+```
+
+Previsualizar build:
+
+```bash
+pnpm preview
+```

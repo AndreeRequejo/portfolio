@@ -1,5 +1,13 @@
 ---
-import { description, phrase } from "../../consts/about";
+import { getDictionary, getLocale, type Locale } from "../../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
 ---
 
 <section
@@ -14,26 +22,26 @@ import { description, phrase } from "../../consts/about";
         <div class="w-2 h-2 bg-primary rotate-45"></div>
         <span
           class="font-mono text-xs uppercase tracking-widest text-muted-foreground"
-          >Publicado hace 1 min</span
+          >{t.about.publishedAgo}</span
         >
       </div>
       <h2 class="text-3xl font-bold leading-tight">
-        Hola, soy Andree<br />
-        <span class="text-primary italic"> desarrollador web. </span>
+        {t.about.headingPrefix}<br />
+        <span class="text-primary italic"> {t.about.headingHighlight} </span>
       </h2>
       <div class="h-px line-decorative"></div>
       <p class="text-muted-foreground leading-relaxed">
-        {description}
+        {t.about.description}
       </p>
     </article>
 
     {/* Philosophy quote */}
     <article class="border-l-2 border-primary pl-6 py-4">
       <blockquote class="text-lg italic text-foreground leading-relaxed">
-        {phrase}
+        {t.about.phrase}
       </blockquote>
       <p class="mt-2 font-mono text-xs text-muted-foreground">
-        — Mi filosofía de desarrollo
+        — {t.about.philosophy}
       </p>
     </article>
   </div>

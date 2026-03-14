@@ -1,5 +1,14 @@
 ---
-import { experiences } from "../../consts/experience";
+import { getDictionary, getLocale, type Locale } from "../../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
+const experiences = t.experience.items;
 ---
 
 <section
@@ -10,7 +19,7 @@ import { experiences } from "../../consts/experience";
   <div class="space-y-6">
     <article class="border border-border bg-card p-5 space-y-0">
       <h3 class="font-mono text-sm uppercase tracking-widest text-primary mb-4">
-        Experiencia laboral
+        {t.experience.heading}
       </h3>
       {
         experiences.map((exp, i) => (

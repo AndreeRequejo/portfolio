@@ -1,5 +1,14 @@
 ---
-import { categories } from "../../consts/skills";
+import { getDictionary, getLocale, type Locale } from "../../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
+const categories = t.skills.categories;
 ---
 
 <section

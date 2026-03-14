@@ -7,9 +7,10 @@ interface TabItem {
 
 interface Props {
   tabs: TabItem[];
+  menuAriaLabel?: string;
 }
 
-const { tabs } = Astro.props;
+const { tabs, menuAriaLabel = "Navigation menu" } = Astro.props;
 const defaultTab = tabs[0]?.id ?? "about";
 ---
 
@@ -92,7 +93,7 @@ const defaultTab = tabs[0]?.id ?? "about";
       id="fab-btn"
       type="button"
       class="relative z-50 w-14 h-14 flex items-center justify-center bg-primary text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-full transition-transform active:scale-90"
-      aria-label="Menú de navegación"
+      aria-label={menuAriaLabel}
     >
       <div class="relative w-6 h-6 pointer-events-none">
         <svg id="fab-icon-menu" class="absolute inset-0 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">

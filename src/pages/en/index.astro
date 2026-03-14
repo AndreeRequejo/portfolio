@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AboutSection from "../../components/sections/AboutSection.astro";
+import ProjectsSection from "../../components/sections/ProjectsSection.astro";
+import SkillsSection from "../../components/sections/SkillsSection.astro";
+import ExperienceSection from "../../components/sections/ExperienceSection.astro";
+import ContactSection from "../../components/sections/ContactSection.astro";
+import { getLocale } from "../../i18n/translations";
+
+const locale = getLocale(Astro.currentLocale);
+---
+
+<Layout locale={locale}>
+  <AboutSection locale={locale} />
+  <ProjectsSection locale={locale} />
+  <SkillsSection locale={locale} />
+  <ExperienceSection locale={locale} />
+  <ContactSection locale={locale} />
+</Layout>

@@ -7,25 +7,33 @@ import "@fontsource-variable/dm-sans";
 import ProfileSidebar from "../components/ProfileSidebar.astro";
 import MobileHeader from "../components/MobileHeader.astro";
 import FeedNav from "../components/FeedNav.astro";
-import { tabs } from "../consts/tabs";
 import { yearNow } from "../consts/utils";
+import { getDictionary, getLocale, type Locale } from "../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={t.meta.htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>Andree Requejo - Developer</title>
+    <title>{t.meta.title}</title>
   </head>
   <body class="min-h-screen bg-background flex flex-col lg:flex-row">
-    <ProfileSidebar />
-    <MobileHeader />
+    <ProfileSidebar locale={locale} />
+    <MobileHeader locale={locale} />
     <main class="flex-1 min-w-0 pb-16 sm:pb-0">
-      <FeedNav tabs={tabs} />
+      <FeedNav tabs={t.tabs} menuAriaLabel={t.language.navigationMenu} />
       <div class="max-w-2xl mx-auto p-4 sm:p-6">
         <div class="h-8 geometric-lines mb-4 opacity-40"></div>
         <slot />
@@ -34,7 +42,7 @@ import { yearNow } from "../consts/utils";
           <p
             class="font-mono text-[10px] uppercase tracking-widest text-muted-foreground"
           >
-            © {yearNow} · Hecho con ♥ y mucho código
+            © {yearNow} · {t.layout.footer}
           </p>
         </footer>
       </div>

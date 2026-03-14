@@ -1,6 +1,15 @@
 ---
 import { ExternalLink, Github, Globe, Smartphone } from "lucide-react";
-import { projects } from "../../consts/projects";
+import { getDictionary, getLocale, type Locale } from "../../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
+const projects = t.projects.items;
 ---
 
 <section
@@ -14,7 +23,7 @@ import { projects } from "../../consts/projects";
       <span
         class="font-mono text-xs uppercase tracking-widest text-muted-foreground"
       >
-        {projects.length} repositorios
+        {projects.length} {t.projects.repositories}
       </span>
     </div>
 
@@ -29,7 +38,7 @@ import { projects } from "../../consts/projects";
           <div class="relative overflow-hidden h-44 sm:h-52">
             <img
               src={project.image}
-              alt={`Preview de ${project.title}`}
+              alt={`${t.projects.previewOf} ${project.title}`}
               class="w-full h-full object-cover"
               loading="lazy"
             />
@@ -43,13 +52,13 @@ import { projects } from "../../consts/projects";
               ) : (
                 <Smartphone size={11} className="text-accent" />
               )}
-              {project.platform === "web" ? "Web" : "Mobile"}
+              {project.platform === "web" ? t.projects.web : t.projects.mobile}
             </div>
 
             {/* Featured badge */}
             {project.featured && (
               <div class="absolute top-3 right-3 px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-primary text-primary-foreground">
-                Featured
+                {t.projects.featured}
               </div>
             )}
 
@@ -60,7 +69,7 @@ import { projects } from "../../consts/projects";
                 class="flex items-center gap-1.5 px-3 py-1.5 bg-card/95 backdrop-blur-sm border border-border text-xs font-medium hover:border-primary hover:text-primary transition-colors"
               >
                 <Github size={13} />
-                Código
+                {t.projects.code}
               </a>
               {project.demo && (
                 <a
@@ -68,7 +77,7 @@ import { projects } from "../../consts/projects";
                   class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-opacity"
                 >
                   <ExternalLink size={13} />
-                  Demo
+                  {t.projects.demo}
                 </a>
               )}
             </div>

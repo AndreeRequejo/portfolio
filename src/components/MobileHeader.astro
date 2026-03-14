@@ -1,7 +1,17 @@
 ---
 import { GraduationCap, FileDown } from "lucide-react";
 import ThemeToggle from "./ThemeToggle.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import avatarImg from "../assets/avatar.png";
+import { getDictionary, getLocale, type Locale } from "../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
 ---
 
 <header
@@ -26,11 +36,12 @@ import avatarImg from "../assets/avatar.png";
         href="https://drive.google.com/file/d/1MXm_xI2DUDdB-uikRSuYO6WciPLweQM1/view?usp=sharing"
         download
         class="w-auto h-10 flex items-center justify-center gap-1 px-2 border border-border text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-        title="Descargar CV"
+        title={t.mobileHeader.cvTitle}
       >
         <FileDown size={16} />
         <span>CV</span>
       </a>
+      <LanguageSwitcher locale={locale} />
       <ThemeToggle />
     </div>
   </div>
@@ -40,8 +51,8 @@ import avatarImg from "../assets/avatar.png";
   >
     <GraduationCap size={12} className="text-primary shrink-0" />
     <span class="text-foreground font-medium"
-      >Ing. de Sistemas y Computación</span
+      >{t.mobileHeader.educationTitle}</span
     >
-    <span class="text-[10px]">· 2021 — 2026</span>
+    <span class="text-[10px]">· {t.mobileHeader.educationPeriod}</span>
   </div>
 </header>

@@ -1,0 +1,42 @@
+---
+import { getDictionary, getLocale, type Locale } from "../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "es" } = Astro.props;
+const t = getDictionary(locale);
+const nextLocale: Locale = locale === "es" ? "en" : "es";
+const nextPath = nextLocale === "es" ? "/" : "/en";
+---
+
+<a
+  href={nextPath}
+  data-locale-switch
+  data-next-locale={nextLocale}
+  class="inline-flex items-center gap-2 h-10 px-3 border border-border bg-card hover:bg-secondary transition-colors"
+  aria-label={`${t.language.label}: ${nextLocale.toUpperCase()}`}
+>
+  <span class="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+    {t.language.label}
+  </span>
+  <span class="font-mono text-xs text-foreground">{nextLocale.toUpperCase()}</span>
+</a>
+
+<script>
+  function syncLocaleSwitchers() {
+    const hash = window.location.hash;
+    document.querySelectorAll<HTMLAnchorElement>("[data-locale-switch]").forEach((link) => {
+      const nextLocale = link.dataset.nextLocale;
+      if (!nextLocale) return;
+
+      const basePath = nextLocale === "es" ? "/" : "/en";
+      link.href = `${basePath}${hash}`;
+    });
+  }
+
+  syncLocaleSwitchers();
+  window.addEventListener("hashchange", syncLocaleSwitchers);
+  document.addEventListener("astro:after-swap", syncLocaleSwitchers);
+</script>

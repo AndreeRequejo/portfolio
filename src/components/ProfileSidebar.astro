@@ -1,15 +1,22 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import {
   MapPin,
   GraduationCap,
   FileDown,
-  Github,
-  Linkedin,
-  ExternalLink,
 } from "lucide-react";
 import avatarImg from "../assets/avatar.png";
 import { socialLinks } from "../consts/socials";
+import { getDictionary, getLocale, type Locale } from "../i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale: localeProp } = Astro.props;
+const locale = getLocale(localeProp ?? Astro.currentLocale);
+const t = getDictionary(locale);
 ---
 
 <aside
@@ -23,9 +30,12 @@ import { socialLinks } from "../consts/socials";
         <span
           class="font-mono text-[10px] tracking-widest uppercase text-muted-foreground"
         >
-          Portfolio
+          {t.sidebar.badge}
         </span>
-        <ThemeToggle />
+        <div class="flex items-center gap-2">
+          <LanguageSwitcher locale={locale} />
+          <ThemeToggle />
+        </div>
       </div>
 
       <!-- Avatar (animado con motion) -->
@@ -57,13 +67,13 @@ import { socialLinks } from "../consts/socials";
 
       <!-- Bio -->
       <p class="text-xs text-muted-foreground leading-relaxed">
-        Full-Stack Developer apasionado por crear experiencias web únicas.
+        {t.sidebar.bio}
       </p>
 
       <!-- Location -->
       <div class="flex items-center gap-2 text-xs text-muted-foreground">
         <MapPin size={12} className="text-primary" />
-        <span>Chiclayo, Perú</span>
+        <span>{t.sidebar.location}</span>
       </div>
 
       <!-- Education -->
@@ -71,15 +81,15 @@ import { socialLinks } from "../consts/socials";
         <div class="flex items-center gap-2 text-xs text-muted-foreground">
           <GraduationCap size={13} className="text-primary"/>
           <span class="font-mono text-[10px] uppercase tracking-widest">
-            Educación
+            {t.sidebar.educationLabel}
           </span>
         </div>
         <div class="pl-5 border-l border-border space-y-1">
           <p class="text-xs font-medium text-foreground leading-snug">
-            Ingeniería de Sistemas y Computación
+            {t.sidebar.educationTitle}
           </p>
           <p class="text-[11px] text-muted-foreground">
-            Universidad Católica Santo Toribio de Mogrovejo · 2021 - 2026
+            {t.sidebar.educationPeriod}
           </p>
         </div>
       </div>
@@ -92,7 +102,7 @@ import { socialLinks } from "../consts/socials";
         class="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
       >
         <FileDown size={15} />
-        Descargar CV
+        {t.sidebar.cvLabel}
       </a>
     </div>
 

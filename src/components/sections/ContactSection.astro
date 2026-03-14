@@ -1,5 +1,6 @@
 ---
 import { Send } from "lucide-react";
+import ContactNotice from "../ui/ContactNotice.astro";
 import { socialLinks } from "../../consts/socials";
 ---
 
@@ -22,28 +23,44 @@ import { socialLinks } from "../../consts/socials";
         </p>
       </div>
 
-      <form class="space-y-3">
+      <ContactNotice />
+
+      <form
+        method="POST"
+        action="https://formspree.io/f/mojklgve"
+        class="space-y-3"
+        data-contact-form
+      >
+        <input
+          type="text"
+          name="_gotcha"
+          tabindex="-1"
+          autocomplete="off"
+          class="hidden"
+          aria-hidden="true"
+        />
+        <input type="hidden" name="form_loaded_at" data-form-loaded-at />
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <input
             type="text"
+            name="name"
             placeholder="Nombre"
+            autocomplete="name"
             required
             class="w-full px-3 py-2.5 text-sm border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
           />
           <input
             type="email"
+            name="email"
             placeholder="Email"
+            autocomplete="email"
             required
             class="w-full px-3 py-2.5 text-sm border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
           />
         </div>
-        <input
-          type="text"
-          placeholder="Asunto"
-          required
-          class="w-full px-3 py-2.5 text-sm border border-border bg-background placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-        />
         <textarea
+          name="message"
           placeholder="Tu mensaje..."
           rows={3}
           required
@@ -51,12 +68,19 @@ import { socialLinks } from "../../consts/socials";
         ></textarea>
         <button
           type="submit"
+          data-submit-button
           class="flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
           <Send size={14} />
-          "Enviar mensaje"
+          Enviar mensaje
         </button>
       </form>
+
+      <script>
+        import { initContactForm } from "../../scripts/contact-form";
+
+        initContactForm();
+      </script>
 
       <div class="border-l-2 border-primary pl-4 py-2">
         <p class="text-sm text-muted-foreground">

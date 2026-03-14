@@ -1,0 +1,32 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = "contact-notice" } = Astro.props;
+---
+
+<div
+  id={id}
+  data-contact-notice
+  data-state="idle"
+  class="hidden border border-border bg-background p-3 sm:p-4"
+  role="status"
+  aria-live="polite"
+>
+  <div class="flex items-start gap-3">
+    <span
+      data-contact-notice-dot
+      class="mt-1 inline-block h-2.5 w-2.5 rounded-full bg-primary"
+    ></span>
+    <div class="min-w-0 space-y-1">
+      <p
+        data-contact-notice-title
+        class="font-mono text-[11px] uppercase tracking-widest text-foreground"
+      >
+        Estado
+      </p>
+      <p data-contact-notice-message class="text-sm text-muted-foreground"></p>
+    </div>
+  </div>
+</div>

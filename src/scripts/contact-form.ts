@@ -1,5 +1,7 @@
 type NoticeState = "pending" | "success" | "error";
 
+import { getDictionary, getLocale, type Locale } from "../i18n/translations";
+
 const MIN_FILL_TIME_MS = 1800;
 const SUBMIT_COOLDOWN_MS = 300000;
 const COOLDOWN_KEY = "portfolio:contact:last-submit-at";
@@ -48,8 +50,11 @@ function setNotice(
   notice: Element | null,
   state: NoticeState,
   message: string,
+  locale: Locale,
 ) {
   if (!(notice instanceof HTMLElement)) return;
+
+  const t = getDictionary(locale).contactForm;
 
   const title = notice.querySelector("[data-contact-notice-title]");
   const body = notice.querySelector("[data-contact-notice-message]");
@@ -66,20 +71,20 @@ function setNotice(
   }
 
   if (state === "pending") {
-    title.textContent = "Enviando";
+    title.textContent = t.pendingTitle;
     notice.className = "border border-border bg-background p-3 sm:p-4 animate-pulse";
     if (dot instanceof HTMLElement) dot.classList.add("bg-primary");
     return;
   }
 
   if (state === "success") {
-    title.textContent = "Mensaje enviado";
+    title.textContent = t.successTitle;
     notice.className = "border border-accent/40 bg-accent/10 p-3 sm:p-4";
     if (dot instanceof HTMLElement) dot.classList.add("bg-accent");
     return;
   }
 
-  title.textContent = "No se pudo enviar";
+  title.textContent = t.errorTitle;
   notice.className = "border border-destructive/40 bg-destructive/10 p-3 sm:p-4";
   if (dot instanceof HTMLElement) dot.classList.add("bg-destructive");
 }
@@ -94,9 +99,11 @@ function getRemainingCooldownMs() {
   return Math.max(0, lastSentAt + SUBMIT_COOLDOWN_MS - Date.now());
 }
 
-export function initContactForm() {
+export function initContactForm(localeFromProps?: string) {
   const form = document.querySelector("[data-contact-form]");
   if (!(form instanceof HTMLFormElement)) return;
+  const locale = getLocale(localeFromProps ?? form.dataset.locale);
+  const t = getDictionary(locale).contactForm;
 
   // Evita listeners duplicados si el componente se rehidrata o reinicializa.
   if (form.dataset.contactInitialized === "true") return;
@@ -119,20 +126,21 @@ export function initContactForm() {
       .trim();
 
     if (honeypotValue.length > 0) {
-      setNotice(notice, "error", "No se pudo validar el envio. Recarga la pagina.");
+      setNotice(notice, "error", t.honeypotError, locale);
       return;
     }
 
     const timeToFill = Date.now() - startedAt;
     if (timeToFill < MIN_FILL_TIME_MS) {
-      setNotice(notice, "error", "Espera un momento antes de enviar el formulario.");
+      setNotice(notice, "error", t.tooFastError, locale);
       return;
     }
 
     const cooldownLeftMs = getRemainingCooldownMs();
     if (cooldownLeftMs > 0) {
       const secondsLeft = Math.ceil(cooldownLeftMs / 1000);
-      setNotice(notice, "error", `Espera ${secondsLeft}s antes de enviar otro mensaje.`);
+      const cooldownMessage = t.cooldownError.replace("{seconds}", String(secondsLeft));
+      setNotice(notice, "error", cooldownMessage, locale);
       return;
     }
 
@@ -141,7 +149,7 @@ export function initContactForm() {
       submitButton.classList.add("opacity-70", "cursor-not-allowed");
     }
 
-    setNotice(notice, "pending", "Enviando tu mensaje...");
+    setNotice(notice, "pending", t.pendingMessage, locale);
 
     try {
       const response = await fetch(form.action, {
@@ -163,12 +171,12 @@ export function initContactForm() {
       if (!response.ok) {
         const errorMessage =
           getMessageFromPayload(payload) ??
-          "No se pudo enviar el mensaje. Intentalo de nuevo.";
-        setNotice(notice, "error", errorMessage);
+          t.genericError;
+        setNotice(notice, "error", errorMessage, locale);
         return;
       }
 
-      setNotice(notice, "success", "Gracias. Te respondere lo antes posible.");
+      setNotice(notice, "success", t.successMessage, locale);
       localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
       form.reset();
 
@@ -180,7 +188,8 @@ export function initContactForm() {
       setNotice(
         notice,
         "error",
-        "Error de red. Revisa tu conexion e intentalo otra vez.",
+        t.networkError,
+        locale,
       );
     } finally {
       if (submitButton instanceof HTMLButtonElement) {
